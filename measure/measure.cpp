@@ -67,7 +67,7 @@ void init() {
   fd = open("/sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj", O_RDONLY);
   fd_dram = open("/sys/class/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:0/energy_uj", O_RDONLY);
 #else
-  fd = open("/dev/cpu/1/msr", O_RDONLY);
+  fd = open("/dev/cpu/3/msr", O_RDONLY);
 
 #endif
   assert(fd > 0);

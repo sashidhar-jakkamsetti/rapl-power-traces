@@ -6,14 +6,15 @@ import time
 import datetime
 import subprocess
 from Crypto.Cipher import AES
-import progressbar
+# import progressbar
 import sys
 
+HOME_FOLDER = "/home/sashi/workspace/trace-collection/"
 
-measureapi = "/home/sashi/work/ransomware/ransomware-data-collection-intel/trace-collection/bin/measureapi"
-shmfd_name = "/home/sashi/work/ransomware/ransomware-data-collection-intel/trace-collection/bin/shmem.txt"
-DATA_FOLDER = "/home/sashi/work/ransomware/ransomware-data-collection-intel/trace-collection/data/"
-DEBUG_FOLDER = "/home/sashi/work/ransomware/ransomware-data-collection-intel/trace-collection/debug/"
+measureapi = HOME_FOLDER + "bin/measureapi"
+shmfd_name = HOME_FOLDER + "bin/shmem.txt"
+DATA_FOLDER = HOME_FOLDER + "data/"
+DEBUG_FOLDER = HOME_FOLDER + "debug/"
 OUT_FILE_PREFIX = "log"
 DEBUG_FILE_PREFIX = "debug"
 
@@ -29,12 +30,12 @@ else:
 	OUT_FILE_PREFIX += "-aes"
 
 block_len = 16
-enc_iter = 45*1024
+enc_iter = 16*1024
 if AES_NI:
-	enc_iter = 32*1024 * 16
+	enc_iter = 16*1024 * 16
 
-exp_iter = 1024*1024
-# exp_iter = 10
+# exp_iter = 1024*1024
+exp_iter = 2
 pt_multiplier = 1024
 
 # key = bytes([0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0])
@@ -42,7 +43,7 @@ key = bytes([75,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
 # key = bytes([75,14,238,255,100,129,64,201,187,192,39,177,4,243,248,16])
 # key = os.urandom(block_len)
 
-password = "sashi\n"
+password = ""
 
 def encryption_exp():
 	pt_og = os.urandom(block_len)

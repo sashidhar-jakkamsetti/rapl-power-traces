@@ -17,9 +17,9 @@ using namespace std;
 
 timer_t gTimerid;
 uint64_t writer = 0;
-uint64_t sample_interval_ns = 1*1000*1000llu;
-double sample_interval_s = 0.001;
-char shmfilename[] = "/home/sashi/work/ransomware/ransomware-data-collection-intel/trace-collection/bin/shmem.txt";
+uint64_t sample_interval_ns = 1*100*1000llu;
+double sample_interval_s = 0.0001;
+char shmfilename[] = "/home/sashi/workspace/trace-collection/bin/shmem.txt";
 
 char *shmem;
 int shmfd;
@@ -27,8 +27,8 @@ int shmfd;
 Measurement buffer[MAX];
 
 void measurement_callback(int sig) {
-  buffer[writer++] = measure_only_rapl();
-  // buffer[writer++] = measure();
+  // buffer[writer++] = measure_only_rapl();
+  buffer[writer++] = measure();
 }
 
 void start_timer(void) {
@@ -98,9 +98,9 @@ int main(int argc, char** argv) {
     stop_timer();
 
     for (uint64_t i = 0; i < writer-1; ++i) {
-      samples[i] = convert(buffer[i], buffer[i+1], sample_interval_s);
-      // samples[i] = convert(buffer[i], buffer[i+1]);
-      fprintf(stderr, "%f;", samples[i].power);
+      // samples[i] = convert(buffer[i], buffer[i+1], sample_interval_s);
+      samples[i] = convert(buffer[i], buffer[i+1]);
+      fprintf(stderr, "%10.10f;", samples[i].power);
     }
     fprintf(stderr, "\n");
     memset(shmem, '0', 1);
