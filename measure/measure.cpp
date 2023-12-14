@@ -35,9 +35,23 @@
 /* Core Voltage */
 #define MSR_PERF_STATUS         0x198
 
-/* RAPL UNIT BITMASK */
-#define POWER_UNIT_OFFSET	0
-#define POWER_UNIT_MASK		0x0F
+/* RAPL bitsmasks */
+#define POWER_UNIT_OFFSET          0
+#define POWER_UNIT_MASK         0x0f
+
+#define ENERGY_UNIT_OFFSET      0x08
+#define ENERGY_UNIT_MASK        0x1f
+
+#define TIME_UNIT_OFFSET        0x10
+#define TIME_UNIT_MASK          0x0f
+
+/* RAPL POWER UNIT MASKS */
+#define POWER_INFO_UNIT_MASK     0x7fff
+#define THERMAL_SHIFT                 0
+#define MINIMUM_POWER_SHIFT          16
+#define MAXIMUM_POWER_SHIFT          32
+#define MAXIMUM_TIME_WINDOW_SHIFT    48
+
 
 #define USE_MSR 1
 #define SUB_DRAM 0
