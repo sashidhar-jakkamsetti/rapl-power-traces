@@ -35,7 +35,7 @@ if AES_NI:
 	enc_iter = 64*1024 * 16
 
 exp_iter = 1024*1024
-# exp_iter = 10
+# exp_iter = 2
 pt_multiplier = 1024
 
 # key = bytes([0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0])
