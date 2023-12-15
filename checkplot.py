@@ -5,7 +5,7 @@ from scipy.spatial import distance
 import statistics as stats
 
 traces = []
-file = open('/home/sashi/workspace/trace-collection/data/log-aes-test.csv', 'r')
+file = open('/home/jas4pi/workspace/rapl-power-traces/data/log-aes-test.csv', 'r')
 
 while True:
     line = file.readline()
