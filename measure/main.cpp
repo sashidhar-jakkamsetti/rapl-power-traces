@@ -19,7 +19,7 @@ timer_t gTimerid;
 uint64_t writer = 0;
 uint64_t sample_interval_ns = 1*100*1000llu;
 double sample_interval_s = 0.0001;
-char shmfilename[] = "/home/sashi/workspace/trace-collection/bin/shmem.txt";
+char shmfilename[] = "/home/jas4pi/workspace/rapl-power-traces/bin/shmem.txt";
 
 char *shmem;
 int shmfd;

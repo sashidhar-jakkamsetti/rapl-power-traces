@@ -9,14 +9,14 @@ from Crypto.Cipher import AES
 # import progressbar
 import sys
 
-HOME_FOLDER = "/home/sashi/workspace/trace-collection/"
+HOME_FOLDER = "/home/jas4pi/workspace/rapl-power-traces/"
 
 measureapi = HOME_FOLDER + "bin/measureapi"
 shmfd_name = HOME_FOLDER + "bin/shmem.txt"
 DATA_FOLDER = HOME_FOLDER + "data/"
 DEBUG_FOLDER = HOME_FOLDER + "debug/"
 OUT_FILE_PREFIX = "log"
-DEBUG_FILE_PREFIX = "debug"
+DEBUG_FILE_PREFIX = "debug-"
 
 AES_NI = True
 
@@ -34,16 +34,16 @@ enc_iter = 16*1024
 if AES_NI:
 	enc_iter = 16*1024 * 16
 
-exp_iter = 128*1024
-# exp_iter = 2
+# exp_iter = 128*1024
+exp_iter = 2
 pt_multiplier = 1024
 
 # key = bytes([0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0])
-key = bytes([75,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
-# key = bytes([75,14,238,255,100,129,64,201,187,192,39,177,4,243,248,16])
+# key = bytes([75,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+key = bytes([75,14,238,255,100,129,64,201,187,192,39,177,4,243,248,16])
 # key = os.urandom(block_len)
 
-password = "sashidhar#3\n"
+password = "\n"
 
 def encryption_exp():
 	pt_og = os.urandom(block_len)
