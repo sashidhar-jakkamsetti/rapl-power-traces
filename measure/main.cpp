@@ -89,8 +89,8 @@ int main(int argc, char** argv) {
       sleep(0);
     }
     start_timer();
-    memset(shmem, '0', 1);
-    // shmem[0] = '0';
+    // memset(shmem, '0', 1);
+    shmem[0] = '0';
 
     while(shmem[0] != '2'){
       sleep(0);
@@ -103,8 +103,8 @@ int main(int argc, char** argv) {
       fprintf(stderr, "%10.10f;", samples[i].power);
     }
     fprintf(stderr, "\n");
-    memset(shmem, '0', 1);
-    // shmem[0] = '0';
+    // memset(shmem, '0', 1);
+    shmem[0] = '0';
 
     while(shmem[0] != '3' && shmem[0] != '4'){
       sleep(0);
