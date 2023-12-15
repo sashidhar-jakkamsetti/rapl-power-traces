@@ -61,15 +61,18 @@ for i in range(len(traces)):
             traces[i] = np.pad(traces[i], (0, pad_len), mode='mean')
         else:
             traces[i] = np.pad(traces[i], (0, pad_len), mode='constant', constant_values=float(0))
+    print("mean and std of trace {0}:  {1}, {2}".format(i, np.mean(traces[i]), np.std(traces[i])))
 
 
+print("\npreprocessing: filtering, alignment\n")
 traces = np.array(traces)
 fig = 0
 N=2
 for i in range(int(len(traces[:int(len(len_trace)*0.5)]))):
-    a = traces[i][100:1100]
+    a = traces[i]
     a = sig.lfilter(np.ones((N,))/N, 1, a)
-    b = traces[i + 1][100:1100]
+    print("mean and std of trace {0}:  {1}, {2}".format(i, np.mean(a), np.std(a)))
+    b = traces[i + 1]
     b = sig.lfilter(np.ones((N,))/N, 1, b)
     # print(a)
     alignment = sig.correlate(a, b)
@@ -87,7 +90,7 @@ for i in range(int(len(traces[:int(len(len_trace)*0.5)]))):
     b = new_alignment
     plt.figure(fig, figsize=(12, 4))
     # _, axes = plt.subplots(1, 1, figsize=(12, 4))
-    plt.plot(a, alpha=0.7, label="trace1", marker=".")
+    plt.plot(a[1000:11000], alpha=0.7, label="trace1", marker=".")
     # plt.plot(b, alpha=0.7, label="trace2", marker="D")
 
     # axes.vlines(np.arange(0, len(a), 1), a, b, alpha = 0.7)
