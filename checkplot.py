@@ -5,7 +5,7 @@ from scipy.spatial import distance
 import statistics as stats
 
 traces = []
-file = open('/home/jas4pi/workspace/rapl-power-traces/data/log-aes-test.csv', 'r')
+file = open('/home/sashi/workspace/trace-collection/data/log-aes-test.csv', 'r')
 
 while True:
     line = file.readline()
@@ -32,6 +32,7 @@ pad = 'mean'
 
 mean_len = stats.mean(len_trace)
 std_len = stats.stdev(len_trace)
+print("\nMean len: {0}, std len: {1}".format(mean_len, std_len))
 range_min = int(mean_len - std_len*4)
 range_max = int(mean_len + std_len*4)
 print("\nPurning traces with length below: {0}, and above: {1}".format(range_min, range_max))
@@ -53,12 +54,10 @@ max_len = int(max(len_trace))
 
 print("\nPre padding with pad value to make all traces match max len\n")
 
-print("printing mean of each trace.")
 for i in range(len(traces)):
     if len(traces[i]) < max_len:
         pad_len = max_len - len(traces[i])
         if pad == 'mean':
-            print(np.mean(trace[i]))
             traces[i] = np.pad(traces[i], (0, pad_len), mode='mean')
         else:
             traces[i] = np.pad(traces[i], (0, pad_len), mode='constant', constant_values=float(0))
