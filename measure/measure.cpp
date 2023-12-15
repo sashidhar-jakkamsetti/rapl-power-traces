@@ -9,6 +9,9 @@
 #include <stdlib.h>
 #include <inttypes.h>
 
+
+#define MSR_RAPL_POWER_UNIT       0x606
+
 /* Package RAPL Domain */
 #define MSR_PKG_RAPL_POWER_LIMIT	0x610
 #define MSR_PKG_ENERGY_STATUS		0x611
@@ -36,6 +39,7 @@
 #define MSR_PERF_STATUS         0x198
 
 /* RAPL bitsmasks */
+
 #define POWER_UNIT_OFFSET          0
 #define POWER_UNIT_MASK         0x0f
 
@@ -75,6 +79,7 @@ static uint64_t calib() {
 static int fd;
 static int fd_dram;
 static uint64_t rdtsc_scale;
+static unsigned int energy_unit;
 
 void init() {
 #if USE_MSR == 0
@@ -82,6 +87,10 @@ void init() {
   fd_dram = open("/sys/class/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:0/energy_uj", O_RDONLY);
 #else
   fd = open("/dev/cpu/3/msr", O_RDONLY);
+  uint64_t data;
+  int n = pread(fd, &data, sizeof data, MSR_RAPL_POWER_UNIT);
+  assert(n == sizeof data);
+  energy_unit = 1<<((data>>ENERGY_UNIT_OFFSET)&ENERGY_UNIT_MASK);
 
 #endif
   assert(fd > 0);
@@ -144,7 +153,7 @@ Sample convert(Measurement const &start, Measurement const &stop) {
     s.energy = s.energy - ((stop.rapl_dram_only - start.rapl_dram_only) / 1000000.0);
   #endif
 #else
-  s.energy = (stop.rapl_readout - start.rapl_readout);
+  s.energy = (((double)(stop.rapl_readout - start.rapl_readout)/energy_unit));
   #if SUB_DRAM == 1
     s.energy = s.energy - (stop.rapl_dram_only - start.rapl_dram_only);
   #endif
@@ -163,7 +172,7 @@ Sample convert(Measurement const &start, Measurement const &stop, double time_in
     s.energy = s.energy - ((stop.rapl_dram_only - start.rapl_dram_only) / 1000000.0);
   #endif
 #else
-  s.energy = (stop.rapl_readout - start.rapl_readout);
+  s.energy = (((double)(stop.rapl_readout - start.rapl_readout)/energy_unit));
   #if SUB_DRAM == 1
     s.energy = s.energy - (stop.rapl_dram_only - start.rapl_dram_only);
   #endif

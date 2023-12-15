@@ -2,3 +2,5 @@
 *.a
 data/
 debug/
+
+plot*.png

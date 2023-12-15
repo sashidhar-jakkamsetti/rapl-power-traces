@@ -5,7 +5,7 @@ from scipy.spatial import distance
 import statistics as stats
 
 traces = []
-file = open('/home/jas4pi/power-analysis/trace-collection/data/1120/log0.csv', 'r')
+file = open('/home/jas4pi/workspace/rapl-power-traces/data/log-aes-test.csv', 'r')
 
 while True:
     line = file.readline()
@@ -17,21 +17,23 @@ while True:
 
     words = line.strip().strip(' ;,').split(';')
     # trace = [float(word) for word in words if float(word) != float(0)]
-    trace = [float(word)/1 for word in words]
+    trace = [float(word) for word in words]
     traces.append(trace)
+    line = file.readline()
     line = file.readline()
     line = file.readline()
 
 file.close()
 
+traces = traces[1:-1]
 initial_len = len(traces)
 len_trace = [len(t) for t in traces]
 pad = 'mean'
 
 mean_len = stats.mean(len_trace)
 std_len = stats.stdev(len_trace)
-range_min = int(mean_len - std_len*2)
-range_max = int(mean_len + std_len*2)
+range_min = int(mean_len - std_len*4)
+range_max = int(mean_len + std_len*4)
 print("\nPurning traces with length below: {0}, and above: {1}".format(range_min, range_max))
 
 i = 0
@@ -49,11 +51,14 @@ while i < len(traces):
 
 max_len = int(max(len_trace))
 
-print("\nPre padding with pad value to make all traces match max len")
+print("\nPre padding with pad value to make all traces match max len\n")
+
+print("printing mean of each trace.")
 for i in range(len(traces)):
     if len(traces[i]) < max_len:
         pad_len = max_len - len(traces[i])
         if pad == 'mean':
+            print(np.mean(trace[i]))
             traces[i] = np.pad(traces[i], (0, pad_len), mode='mean')
         else:
             traces[i] = np.pad(traces[i], (0, pad_len), mode='constant', constant_values=float(0))
@@ -61,16 +66,17 @@ for i in range(len(traces)):
 
 traces = np.array(traces)
 fig = 0
+N=2
 for i in range(int(len(traces[:int(len(len_trace)*0.5)]))):
-    a = traces[i]
-    b = traces[i + 1]
-    # a = traces[i][100:1000]
-    # b = traces[i + 1][100:1000]
-    print(a)
+    a = traces[i][100:1100]
+    a = sig.lfilter(np.ones((N,))/N, 1, a)
+    b = traces[i + 1][100:1100]
+    b = sig.lfilter(np.ones((N,))/N, 1, b)
+    # print(a)
     alignment = sig.correlate(a, b)
     euclid_distance_a_to_b = distance.euclidean(a, b)
-    print("euclidean distance ", euclid_distance_a_to_b)
-    print(np.argmax(alignment))
+    print("euclidean distance: ", euclid_distance_a_to_b)
+    print("argmax of alignment: ", np.argmax(alignment))
     offset = np.argmax(alignment) - len(a)
     pad_value = np.mean(a)
     new_alignment = np.array([pad_value]*len(a))

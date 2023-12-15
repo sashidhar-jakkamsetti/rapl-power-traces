@@ -30,12 +30,12 @@ else:
 	OUT_FILE_PREFIX += "-aes"
 
 block_len = 16
-enc_iter = 16*1024
+enc_iter = 32*1024
 if AES_NI:
 	enc_iter = 16*1024 * 16
 
 # exp_iter = 128*1024
-exp_iter = 2
+exp_iter = 10
 pt_multiplier = 1024
 
 # key = bytes([0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0])
