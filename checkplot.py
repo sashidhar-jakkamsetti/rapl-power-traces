@@ -5,12 +5,7 @@ from scipy.spatial import distance
 import statistics as stats
 
 traces = []
-<<<<<<< HEAD
-file = open('/home/sashi/workspace/trace-collection/data/log-aes-test.csv', 'r')
-# file = open('/home/sashi/workspace/trace-collection/data/1213/log-aes.csv', 'r')
-=======
 file = open('/home/jas4pi/workspace/rapl-power-traces/data/log-aes-test.csv', 'r')
->>>>>>> ecc36841ca37d6038d8f29671fc37daca232e108
 
 count = 0
 while count <12:
