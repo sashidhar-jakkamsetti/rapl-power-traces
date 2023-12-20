@@ -17,9 +17,9 @@ using namespace std;
 
 timer_t gTimerid;
 uint64_t writer = 0;
-uint64_t sample_interval_ns = 1*1000*1000llu;
-double sample_interval_s = 0.001;
-char shmfilename[] = "/home/jas4pi/workspace/rapl-power-traces/bin/shmem.txt";
+uint64_t sample_interval_ns = 1*100*1000llu;
+double sample_interval_s = 0.0001;
+char shmfilename[] = "/home/sashi/workspace/trace-collection/bin/shmem.txt";
 
 char *shmem;
 int shmfd;
@@ -61,7 +61,7 @@ int setup_shm() {
   shmfd = -1;
   if ((shmfd = open(shmfilename, O_RDWR, 0)) == -1)
   {
-    printf("unable to open shmem file\n");
+    fprintf(stderr, "unable to open shmem file\n");
     return -1;
   }
   shmem = (char*) mmap(NULL, 2, PROT_READ | PROT_WRITE, MAP_SHARED, shmfd, 0);
@@ -88,6 +88,7 @@ int main(int argc, char** argv) {
     while(shmem[0] != '1'){
       sleep(0);
     }
+
     start_timer();
     // memset(shmem, '0', 1);
     shmem[0] = '0';

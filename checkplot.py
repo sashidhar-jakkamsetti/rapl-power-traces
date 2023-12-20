@@ -6,13 +6,15 @@ import statistics as stats
 
 traces = []
 file = open('/home/sashi/workspace/trace-collection/data/log-aes-test.csv', 'r')
+# file = open('/home/sashi/workspace/trace-collection/data/1213/log-aes.csv', 'r')
 
-while True:
+count = 0
+while count <12:
     line = file.readline()
     if line == '':
         break
-    if "[sudo] password for jas4pi: " in line:
-        line = line.replace("[sudo] password for jas4pi: ", "")
+    if "[sudo] password for sashi: " in line:
+        line = line.replace("[sudo] password for sashi: ", "")
     trace = []
 
     words = line.strip().strip(' ;,').split(';')
@@ -22,6 +24,7 @@ while True:
     line = file.readline()
     line = file.readline()
     line = file.readline()
+    count += 1
 
 file.close()
 
