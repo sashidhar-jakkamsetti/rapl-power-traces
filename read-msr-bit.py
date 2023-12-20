@@ -6,7 +6,6 @@ def read_msr(msr_number):
         with open('/dev/cpu/0/msr', 'rb') as f:
             f.seek(msr_number)
             data = f.read(8)
-            data = b'\x00\x10'
             return int.from_bytes(data, 'little')
     except Exception as e:
         print(e)

@@ -79,7 +79,7 @@ static uint64_t calib() {
 static int fd;
 static int fd_dram;
 static uint64_t rdtsc_scale;
-static unsigned int energy_unit;
+static uint64_t energy_unit;
 
 void init() {
 #if USE_MSR == 0
@@ -91,6 +91,7 @@ void init() {
   int n = pread(fd, &data, sizeof data, MSR_RAPL_POWER_UNIT);
   assert(n == sizeof data);
   energy_unit = 1<<((data>>ENERGY_UNIT_OFFSET)&ENERGY_UNIT_MASK);
+  // fprintf(stderr, "%" PRId64 "\n", energy_unit);
 
 #endif
   assert(fd > 0);
@@ -153,7 +154,7 @@ Sample convert(Measurement const &start, Measurement const &stop) {
     s.energy = s.energy - ((stop.rapl_dram_only - start.rapl_dram_only) / 1000000.0);
   #endif
 #else
-  s.energy = (((double)(stop.rapl_readout - start.rapl_readout)/energy_unit));
+  s.energy = (((double)(stop.rapl_readout - start.rapl_readout)/(double)energy_unit));
   #if SUB_DRAM == 1
     s.energy = s.energy - (stop.rapl_dram_only - start.rapl_dram_only);
   #endif
@@ -172,7 +173,7 @@ Sample convert(Measurement const &start, Measurement const &stop, double time_in
     s.energy = s.energy - ((stop.rapl_dram_only - start.rapl_dram_only) / 1000000.0);
   #endif
 #else
-  s.energy = (((double)(stop.rapl_readout - start.rapl_readout)/energy_unit));
+  s.energy = (((double)(stop.rapl_readout - start.rapl_readout)/(double)energy_unit));
   #if SUB_DRAM == 1
     s.energy = s.energy - (stop.rapl_dram_only - start.rapl_dram_only);
   #endif

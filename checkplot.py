@@ -5,8 +5,12 @@ from scipy.spatial import distance
 import statistics as stats
 
 traces = []
+<<<<<<< HEAD
 file = open('/home/sashi/workspace/trace-collection/data/log-aes-test.csv', 'r')
 # file = open('/home/sashi/workspace/trace-collection/data/1213/log-aes.csv', 'r')
+=======
+file = open('/home/jas4pi/workspace/rapl-power-traces/data/log-aes-test.csv', 'r')
+>>>>>>> ecc36841ca37d6038d8f29671fc37daca232e108
 
 count = 0
 while count <12:
@@ -93,7 +97,7 @@ for i in range(int(len(traces[:int(len(len_trace)*0.5)]))):
     b = new_alignment
     plt.figure(fig, figsize=(12, 4))
     # _, axes = plt.subplots(1, 1, figsize=(12, 4))
-    plt.plot(a[1000:11000], alpha=0.7, label="trace1", marker=".")
+    plt.plot(a[100:1100], alpha=0.7, label="trace1", marker=".")
     # plt.plot(b, alpha=0.7, label="trace2", marker="D")
 
     # axes.vlines(np.arange(0, len(a), 1), a, b, alpha = 0.7)
