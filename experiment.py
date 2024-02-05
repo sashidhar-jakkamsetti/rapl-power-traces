@@ -6,7 +6,7 @@ import time
 import datetime
 import subprocess
 from Crypto.Cipher import AES
-# import progressbar
+import progressbar
 import sys
 
 HOME_FOLDER = "/home/sashi/workspace/trace-collection/"
@@ -35,17 +35,13 @@ if AES_NI:
 	enc_iter = 16 * 1024 * 16
 
 exp_iter = 1024*1024
-# exp_iter = 2
+att_exp_iter = 15000
 pt_multiplier = 1024
 
-# key = bytes([0,0,0,255,0,0,0,0,0,0,0,0,0,0,0,0])
-# key = bytes([75,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
-key = bytes([75,14,238,255,100,129,64,201,187,192,39,177,4,243,248,16])
-# key = os.urandom(block_len)
 
-password = "\n"
+password = "sashidhar#3\n"
 
-def encryption_exp():
+def encryption_exp(key):
 	pt_og = os.urandom(block_len)
 	pt = pt_og*(pt_multiplier)
 
@@ -106,22 +102,27 @@ shm = mmap.mmap(shmfd.fileno(), 2, flags=mmap.MAP_SHARED, \
 debug_filename = os.path.join(DEBUG_FOLDER, DEBUG_FILE_PREFIX + str(date))
 debugfd = open(debug_filename, "w+")
 
-# print("starting experiments\n")
+print("starting experiments\n")
 debugfd.write("Debug log for instance at time: {0}\n\n".format(str(date)))
 debugfd.flush()
 
-# bar = progressbar.ProgressBar(maxval=exp_iter, widgets=['[', progressbar.Timer(), '] ', \
-# 														    progressbar.Bar(), ' (',  \
-# 															progressbar.ETA(), ')', ' (', \
-# 															progressbar.Percentage(), ')'])
+bar = progressbar.ProgressBar(maxval=exp_iter, widgets=['[', progressbar.Timer(), '] ', \
+														    progressbar.Bar(), ' (',  \
+															progressbar.ETA(), ')', ' (', \
+															progressbar.Percentage(), ')'])
 
 
-# bar.start()
+bar.start()
 for i in range(exp_iter):
 	debugfd.write("experiment {0}:\t".format(i))
 	debugfd.flush()
+
+	if i < att_exp_iter:
+		key = bytes([75,14,238,255,100,129,64,201,187,192,39,177,4,243,248,16])
+	else:
+		key = os.urandom(block_len)
 	
-	key, pt, ct = encryption_exp()
+	key, pt, ct = encryption_exp(key)
 	logfd.flush()
 	# print("exp ", i)
 
@@ -147,7 +148,7 @@ for i in range(exp_iter):
 	shm.write('3'.encode())
 	shm.flush()
 
-	# bar.update(i + 1)
+	bar.update(i + 1)
 
 shm.seek(0)
 shm.write('4'.encode())
@@ -155,11 +156,11 @@ shm.flush()
 shm.close()
 shmfd.close()
 
-# bar.finish()
+bar.finish()
 logfd.flush()
 logfd.close()
 
 debugfd.write("Finished!\n")
 debugfd.flush()
 debugfd.close()
-# print("finished!\n")
+print("finished!\n")
